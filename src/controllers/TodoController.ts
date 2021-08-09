@@ -2,6 +2,7 @@ import express from 'express';
 import { TodoModel } from '@models/TodoModel';
 import { title } from 'process';
 import { checkEmail } from 'src/services/email.service';
+import { getRandomDogFacts } from 'src/services/facts.service';
 
 class TodoController {
 
@@ -97,7 +98,19 @@ class TodoController {
   }
 
   public generateRandom = async (request: express.Request, response: express.Response) => {
-    return null;
+    try {
+      const name = 'Eu'
+      const email = 'eu@me.com'
+      const dogFacts = await getRandomDogFacts();
+
+      const todos = await Promise.all(dogFacts.map((description) => {
+        return TodoModel.create({ title: description, description, email, name });
+      }));
+
+      return response.status(201).json(todos);
+    } catch (error) {
+      return response.status(500).json({ error: 'To-do generate failed' });
+    }
   }
 }
 
