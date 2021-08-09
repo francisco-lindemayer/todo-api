@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  todo-db:
+      container_name: todo-database
+      image: postgres:11
+      restart: unless-stopped
+      volumes:
+        - postgres-todo-data:/data
+      environment:
+        POSTGRES_DB: ${DB_NAME}
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASS}
+      networks:
+        - app-connect
+
+  app:
+    container_name: todo-server
+    command: yarn dev
+    build: .
+    volumes:
+      - .:/home/node/api
+    depends_on:
+      - todo-db
+    networks:
+      - app-connect
+    ports:
+      - ${PORT}:3333
+
+volumes:
+  postgres-todo-data:
+
+networks:
+  app-connect:
+    driver: bridge
