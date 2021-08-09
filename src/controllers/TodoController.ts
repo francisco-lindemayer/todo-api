@@ -1,6 +1,7 @@
 import express from 'express';
 import { TodoModel } from '@models/TodoModel';
 import { title } from 'process';
+import { checkEmail } from 'src/services/email.service';
 
 class TodoController {
 
@@ -31,6 +32,13 @@ class TodoController {
   public create = async (request: express.Request, response: express.Response) => {
     const { title, description, email, name } = request.body;
     try {
+
+      const validatedEmail = await checkEmail(email);
+
+      if (!validatedEmail.valid_email) {
+        return response.status(422).json(validatedEmail);
+      }
+
       const todo = await TodoModel.create({ title, description, email, name });
 
       return response.status(201).json(todo);
