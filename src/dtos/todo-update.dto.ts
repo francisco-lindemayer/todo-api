@@ -1,8 +1,8 @@
 import { TodoStatusEnum } from "src/enum/todo-status.enum";
 
-interface TodoIndexDTO {
+export interface TodoUpdateDTO {
   description: string;
   email: string;
   name: string;
-  status: TodoStatusEnum
+  status: keyof TodoStatusEnum
 }

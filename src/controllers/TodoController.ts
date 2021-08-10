@@ -47,19 +47,17 @@ class TodoController {
   }
 
   public update = async (request: Request, response: Response) => {
-    // const { id } = request.params;
-    // const { title, description, email, name } = request.body;
-    // try {
-    //   if (!(await TodoModel.findByPk(id))) {
-    //     return this.create(request, response);
-    //   }
-
-    //   await TodoModel.update({ description, email, name }, { where: { id } });
-
-    //   return response.status(201).json();
-    // } catch (error) {
-    //   return response.status(500).json({ error: 'To-do update failed', details: error });
-    // }
+    const { id } = request.params;
+    const { description, email, name, status } = request.body;
+    try {
+      if (!(await TodoRepository.index(id))) {
+        return this.create(request, response);
+      }
+      await TodoRepository.update(id, { description, email, name, status });
+      return response.status(201).json();
+    } catch (error) {
+      return response.status(500).json({ error: 'To-do update failed', details: error });
+    }
   }
 
   public delete = async (request: Request, response: Response) => {

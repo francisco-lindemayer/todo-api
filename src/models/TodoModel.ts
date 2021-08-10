@@ -1,10 +1,11 @@
 import { Model, Table, Column, PrimaryKey, IsUUID, AllowNull, NotEmpty, CreatedAt, UpdatedAt, Default } from 'sequelize-typescript';
+import { TodoStatusEnum } from 'src/enum/todo-status.enum';
 interface TodoModelInterface {
   id: string;
   description: string;
   email: string;
   name: string;
-  status?: 'OPENED' | 'CONCLUDED'
+  status?: keyof TodoStatusEnum
 }
 @Table({
   tableName: 'todo',
