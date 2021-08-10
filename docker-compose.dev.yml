@@ -18,6 +18,7 @@ services:
     container_name: todo-server
     command: yarn dev
     build: .
+    restart: on-failure
     volumes:
       - .:/home/node/api
     depends_on:
