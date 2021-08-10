@@ -36,7 +36,7 @@ class TodoController {
   public index = async (request: Request, response: Response) => {
     const { id } = request.params;
     try {
-      const todos = await TodoModel.findByPk(id);
+      const todos = await TodoRepository.index(id);
       if (!todos) {
         return response.status(404).json({ error: 'Todo not found' });
       }

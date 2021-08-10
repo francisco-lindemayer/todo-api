@@ -16,7 +16,9 @@ class TodoRepository implements RepositoryBaseInterface {
     return await TodoModel.create({ id, description, email, name });
   };
 
-  index: () => Promise<any>;
+  async index(id: string) {
+    return await TodoModel.findByPk(id);
+  }
 
   update: () => Promise<any>;
 
