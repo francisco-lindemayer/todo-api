@@ -10,7 +10,7 @@ import TodoEventRepository from "./todo-event.repository";
 class TodoRepository implements RepositoryBaseInterface {
   async show() {
     return await TodoModel.findAll({
-      order: [['id', 'ASC']]
+      order: [['created_at', 'ASC']]
     });
   }
 
@@ -21,7 +21,11 @@ class TodoRepository implements RepositoryBaseInterface {
 
   async index(id: string) {
     return await TodoModel.findByPk(id, {
-      include: [TodoEventModel]
+      include: [{
+        model: TodoEventModel,
+        order: [['created_at', 'ASC']]
+      }],
+
     });
   }
 
