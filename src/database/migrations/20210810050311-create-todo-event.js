@@ -2,24 +2,19 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return await queryInterface.createTable('todo', {
+    return queryInterface.createTable('todo_event', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
       },
-      description: {
-        type: Sequelize.STRING,
+      todo_id: {
+        type: Sequelize.UUID,
         allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        references: { model: 'todo', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       status: {
         type: Sequelize.ENUM('OPENED', 'CONCLUDED'),
@@ -38,6 +33,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return await queryInterface.dropTable('todo');
+    return await queryInterface.dropTable('todo_event');
   }
 };

@@ -1,4 +1,5 @@
-import { Model, Table, Column, PrimaryKey, IsUUID, AllowNull, NotEmpty, CreatedAt, UpdatedAt, Default } from 'sequelize-typescript';
+import { Model, Table, Column, PrimaryKey, IsUUID, AllowNull, NotEmpty, CreatedAt, UpdatedAt, Default, HasMany, AfterUpdate } from 'sequelize-typescript';
+import { TodoEventModel } from '@models/todo-event.model';
 import { TodoStatusEnum } from 'src/enum/todo-status.enum';
 interface TodoModelInterface {
   id: string;
@@ -46,4 +47,7 @@ export class TodoModel extends Model<TodoModelInterface>{
   @UpdatedAt
   @Column
   updated_at: Date;
+
+  @HasMany(() => TodoEventModel)
+  event: TodoEventModel[]
 }

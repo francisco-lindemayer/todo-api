@@ -3,6 +3,8 @@ import { TodoModel } from '@models/TodoModel';
 import EmailService from 'src/services/email.service';
 import TodoRepository from 'src/repositories/todo.repository';
 import { getRandomDogFacts } from 'src/services/facts.service';
+import { TodoStatusEnum } from 'src/enum/todo-status.enum';
+import { TodoEventModel } from '@models/todo-event.model';
 
 class TodoController {
 
@@ -83,7 +85,12 @@ class TodoController {
       if (password !== process.env.MANAGER_PASS) {
         return response.status(403).json({ error: 'Invalid password to reopen TODO' });
       }
-      await TodoRepository.update(id, { status })
+      if (status === TodoStatusEnum.OPENED) {
+        if (!this.haveReopen(todo.event)) {
+          return response.status(422).json({ error: 'Limit to reopen TODO reached' });
+        }
+      }
+      await TodoRepository.changeStatus(id, { status })
       return response.status(201).json();
     } catch (error) {
       return response.status(500).json({ error: 'TODO change status failed' });
@@ -104,6 +111,11 @@ class TodoController {
     //   } catch (error) {
     //     return response.status(500).json({ error: 'To-do generate failed' });
     //   }
+  }
+
+  private haveReopen(todoEvents: TodoEventModel[]): boolean {
+    const LIMIT_REOPEN = 2;
+    return todoEvents.filter(({ status }) => status === TodoStatusEnum.CONCLUDED).length <= LIMIT_REOPEN;
   }
 }
 
