@@ -9,15 +9,11 @@ class TodoController {
   public create = async (request: Request, response: Response) => {
     const { description, email, name } = request.body;
     try {
-
       const validatedEmail = await EmailService.check(email);
-
       if (!validatedEmail.valid_email) {
         return response.status(422).json(validatedEmail);
       }
-
       const todo = await TodoRepository.create({ description, email, name })
-
       return response.status(201).json(todo);
     } catch (error) {
       return response.status(500).json({ error: 'To-do create failed', details: error });
