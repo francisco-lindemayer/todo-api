@@ -1,5 +1,4 @@
 import { Model, Table, Column, PrimaryKey, IsUUID, AllowNull, NotEmpty, CreatedAt, UpdatedAt, Default } from 'sequelize-typescript';
-import { v4 } from 'uuid';
 interface TodoModelInterface {
   id: string;
   description: string;
