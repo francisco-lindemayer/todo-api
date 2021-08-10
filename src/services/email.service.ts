@@ -15,15 +15,22 @@ interface IValidateEmail {
   score: number;
 }
 
-export const checkEmail = async (email: string): Promise<{
-  valid_email: boolean;
-  did_you_mean?: string;
-}> => {
-  const { data } = await axios.get<IValidateEmail>(`http://apilayer.net/api/check?access_key=${process.env.APILAYER_KEY}&email=${email}`);
+class EmailService {
 
-  if (data.format_valid && data.mx_found) {
-    return { valid_email: true }
-  } else {
-    return { valid_email: false, did_you_mean: data.did_you_mean }
+  async check(email: string): Promise<{
+    valid_email: boolean;
+    did_you_mean?: string;
+  }> {
+
+    const { data } = await axios.get<IValidateEmail>(`http://apilayer.net/api/check?access_key=${process.env.APILAYER_KEY}&email=${email}`);
+
+    if (data.format_valid && data.mx_found) {
+      return { valid_email: true }
+    } else {
+      return { valid_email: false, did_you_mean: data.did_you_mean }
+    }
   }
+
 }
+
+export default new EmailService()

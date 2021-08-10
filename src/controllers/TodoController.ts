@@ -1,11 +1,28 @@
 import { Request, Response } from 'express';
 import { TodoModel } from '@models/TodoModel';
-import { title } from 'process';
-import { checkEmail } from 'src/services/email.service';
-import { getRandomDogFacts } from 'src/services/facts.service';
+import EmailService from 'src/services/email.service';
 import TodoRepository from 'src/repositories/todo.repository';
+import { getRandomDogFacts } from 'src/services/facts.service';
 
 class TodoController {
+
+  public create = async (request: Request, response: Response) => {
+    const { description, email, name } = request.body;
+    try {
+
+      const validatedEmail = await EmailService.check(email);
+
+      if (!validatedEmail.valid_email) {
+        return response.status(422).json(validatedEmail);
+      }
+
+      const todo = await TodoRepository.create({ description, email, name })
+
+      return response.status(201).json(todo);
+    } catch (error) {
+      return response.status(500).json({ error: 'To-do create failed', details: error });
+    }
+  }
 
   public show = async (request: Request, response: Response) => {
     try {
@@ -17,33 +34,15 @@ class TodoController {
   }
 
   public index = async (request: Request, response: Response) => {
-    // const { id } = request.params;
-    // try {
-    //   const todos = await TodoModel.findByPk(id);
-    //   if (!todos) {
-    //     return response.status(404).json({ error: 'Todo not found' });
-    //   }
-    //   return response.status(200).json(todos);
-    // } catch (error) {
-    //   return response.status(500).json({ error: 'Get todo failed' });
-    // }
-  }
-
-  public create = async (request: Request, response: Response) => {
-    const { description, email, name } = request.body;
+    const { id } = request.params;
     try {
-
-      const validatedEmail = await checkEmail(email);
-
-      if (!validatedEmail.valid_email) {
-        return response.status(422).json(validatedEmail);
+      const todos = await TodoModel.findByPk(id);
+      if (!todos) {
+        return response.status(404).json({ error: 'Todo not found' });
       }
-
-      const todo = await TodoRepository.create({ description, email, name })
-
-      return response.status(201).json(todo);
+      return response.status(200).json(todos);
     } catch (error) {
-      return response.status(500).json({ error: 'To-do create failed', details: error });
+      return response.status(500).json({ error: 'Get todo failed' });
     }
   }
 
