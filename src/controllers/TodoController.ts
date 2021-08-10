@@ -70,21 +70,24 @@ class TodoController {
   }
 
   public changeStatus = async (request: Request, response: Response) => {
-    // const { id } = request.params;
-    // const { status, password } = request.body;
-    // const updated_at = new Date();
-
-    // try {
-    //   if (!(await TodoModel.findByPk(id))) {
-    //     return response.status(400).json({ error: 'To-do not found' });
-    //   }
-
-    //   await TodoModel.update({ status }, { where: { id } });
-
-    //   return response.status(201).json();
-    // } catch (error) {
-    //   return response.status(500).json({ error: 'To-do change status failed' });
-    // }
+    const { id } = request.params;
+    const { status, password } = request.body;
+    try {
+      const todo = await TodoRepository.index(id);
+      if (!(todo)) {
+        return response.status(400).json({ error: 'TODO not found' });
+      }
+      if (status === todo.status) {
+        return response.status(422).json({ error: 'TODO already has this status' });
+      }
+      if (password !== process.env.MANAGER_PASS) {
+        return response.status(403).json({ error: 'Invalid password to reopen TODO' });
+      }
+      await TodoRepository.update(id, { status })
+      return response.status(201).json();
+    } catch (error) {
+      return response.status(500).json({ error: 'TODO change status failed' });
+    }
   }
 
   public generateRandom = async (request: Request, response: Response) => {
