@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { TodoModel } from '@models/TodoModel';
 import EmailService from 'src/services/email.service';
 import TodoRepository from 'src/repositories/todo.repository';
-import { getRandomDogFacts } from 'src/services/facts.service';
+import RandomFacts from 'src/services/facts.service';
 import { TodoStatusEnum } from 'src/enum/todo-status.enum';
 import { TodoEventModel } from '@models/todo-event.model';
 
@@ -98,19 +98,19 @@ class TodoController {
   }
 
   public generateRandom = async (request: Request, response: Response) => {
-    //   try {
-    //     const name = 'Eu'
-    //     const email = 'eu@me.com'
-    //     const dogFacts = await getRandomDogFacts();
+    try {
+      const name = 'Eu'
+      const email = 'eu@me.com'
+      const dogFacts = await RandomFacts.getDogFacts();
 
-    //     const todos = await Promise.all(dogFacts.map((description) => {
-    //       return TodoModel.create({ description, email, name });
-    //     }));
+      const todos = await Promise.all(dogFacts.map((description) => {
+        return TodoRepository.create({ description, email, name });
+      }));
 
-    //     return response.status(201).json(todos);
-    //   } catch (error) {
-    //     return response.status(500).json({ error: 'To-do generate failed' });
-    //   }
+      return response.status(201).json(todos);
+    } catch (error) {
+      return response.status(500).json({ error: 'To-do generate failed' });
+    }
   }
 
   private haveReopen(todoEvents: TodoEventModel[]): boolean {
