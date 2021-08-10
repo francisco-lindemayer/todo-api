@@ -57,18 +57,16 @@ class TodoController {
   }
 
   public delete = async (request: Request, response: Response) => {
-    // const { id } = request.params;
-    // try {
-    //   if (!(await TodoModel.findByPk(id))) {
-    //     return response.status(400).json({ error: 'To-do not found' });
-    //   }
-
-    //   await TodoModel.destroy({ where: { id } });
-
-    //   return response.status(204).json();
-    // } catch (error) {
-    //   return response.status(500).json({ error: 'To-do delete failed' });
-    // }
+    const { id } = request.params;
+    try {
+      if (!(await TodoRepository.index(id))) {
+        return response.status(400).json({ error: 'To-do not found' });
+      }
+      await TodoRepository.delete(id);
+      return response.status(204).json();
+    } catch (error) {
+      return response.status(500).json({ error: 'To-do delete failed' });
+    }
   }
 
   public changeStatus = async (request: Request, response: Response) => {

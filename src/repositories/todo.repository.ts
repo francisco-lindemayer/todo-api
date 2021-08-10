@@ -26,7 +26,9 @@ class TodoRepository implements RepositoryBaseInterface {
     return await TodoModel.update({ description, email, name, status }, { where: { id } });
   }
 
-  delete: () => Promise<any>;
+  async delete(id: string) {
+    return await TodoModel.destroy({ where: { id } });
+  }
 
 }
 
