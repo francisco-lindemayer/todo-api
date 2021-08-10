@@ -18,7 +18,7 @@ class TodoController {
       const todo = await TodoRepository.create({ description, email, name })
       return response.status(201).json(todo);
     } catch (error) {
-      return response.status(500).json({ error: 'To-do create failed', details: error });
+      return response.status(500).json({ error: 'TODO create failed', details: error });
     }
   }
 
@@ -27,7 +27,7 @@ class TodoController {
       const todos = await TodoRepository.show();
       return response.status(200).json(todos);
     } catch (error) {
-      return response.status(500).json({ error: 'Get todo list failed' });
+      return response.status(500).json({ error: 'Get TODO list failed' });
     }
   }
 
@@ -36,11 +36,11 @@ class TodoController {
     try {
       const todos = await TodoRepository.index(id);
       if (!todos) {
-        return response.status(404).json({ error: 'Todo not found' });
+        return response.status(404).json({ error: 'TODO not found' });
       }
       return response.status(200).json(todos);
     } catch (error) {
-      return response.status(500).json({ error: 'Get todo failed' });
+      return response.status(500).json({ error: 'Get TODO failed' });
     }
   }
 
@@ -54,7 +54,7 @@ class TodoController {
       await TodoRepository.update(id, { description, email, name, status });
       return response.status(201).json();
     } catch (error) {
-      return response.status(500).json({ error: 'To-do update failed', details: error });
+      return response.status(500).json({ error: 'TODO update failed', details: error });
     }
   }
 
@@ -62,12 +62,12 @@ class TodoController {
     const { id } = request.params;
     try {
       if (!(await TodoRepository.index(id))) {
-        return response.status(400).json({ error: 'To-do not found' });
+        return response.status(400).json({ error: 'TODO not found' });
       }
       await TodoRepository.delete(id);
       return response.status(204).json();
     } catch (error) {
-      return response.status(500).json({ error: 'To-do delete failed' });
+      return response.status(500).json({ error: 'TODO delete failed' });
     }
   }
 
@@ -102,14 +102,12 @@ class TodoController {
       const name = 'Eu'
       const email = 'eu@me.com'
       const dogFacts = await RandomFacts.getDogFacts();
-
       const todos = await Promise.all(dogFacts.map((description) => {
         return TodoRepository.create({ description, email, name });
       }));
-
       return response.status(201).json(todos);
     } catch (error) {
-      return response.status(500).json({ error: 'To-do generate failed' });
+      return response.status(500).json({ error: 'TODO generate failed' });
     }
   }
 
