@@ -4,13 +4,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return await queryInterface.createTable('todo', {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      title: {
-        type: Sequelize.STRING,
         allowNull: false,
       },
       description: {
