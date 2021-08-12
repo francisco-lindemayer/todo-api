@@ -51,8 +51,8 @@ class TodoController {
       if (!(await TodoRepository.index(id))) {
         return this.create(request, response);
       }
-      await TodoRepository.update(id, { description, email, name, status });
-      return response.status(201).json();
+      const updatedTodo = await TodoRepository.update(id, { description, email, name, status });
+      return response.status(201).json(updatedTodo);
     } catch (error) {
       return response.status(500).json({ error: 'TODO update failed', details: error });
     }
@@ -82,16 +82,18 @@ class TodoController {
       if (status === todo.status) {
         return response.status(422).json({ error: 'TODO already has this status' });
       }
-      if (password !== process.env.MANAGER_PASS) {
-        return response.status(403).json({ error: 'Invalid password to reopen TODO' });
+      if (status === TodoStatusEnum.OPENED) {
+        if (password !== process.env.MANAGER_PASS) {
+          return response.status(403).json({ error: 'Invalid password to reopen TODO' });
+        }
       }
       if (status === TodoStatusEnum.OPENED) {
         if (!this.haveReopen(todo.event)) {
           return response.status(422).json({ error: 'Limit to reopen TODO reached' });
         }
       }
-      await TodoRepository.changeStatus(id, { status })
-      return response.status(201).json();
+      const updatedTodo = await TodoRepository.changeStatus(id, { status })
+      return response.status(201).json(updatedTodo);
     } catch (error) {
       return response.status(500).json({ error: 'TODO change status failed' });
     }

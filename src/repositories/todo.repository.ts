@@ -1,6 +1,5 @@
 import { v4 as uuid } from "uuid";
 import { RepositoryBaseInterface } from "src/interfaces/repository-base.interface";
-import { TodoStatusEnum } from '../enum/todo-status.enum';
 import { TodoModel } from "@models/TodoModel";
 import { TodoEventModel } from "@models/todo-event.model";
 import { TodoCreateDTO } from "src/dtos/todo-create.dto";
@@ -30,7 +29,9 @@ class TodoRepository implements RepositoryBaseInterface {
   }
 
   async update(id: string, { description, email, name, status }: TodoUpdateDTO) {
-    return await TodoModel.update({ description, email, name, status }, { where: { id } });
+    const updatedTodo = await TodoModel.update({ description, email, name, status }, { where: { id } })
+      .then(([rowsUpdate, [updateTodo]]) => updateTodo.get());
+    return updatedTodo;
   }
 
   async delete(id: string) {
@@ -38,8 +39,10 @@ class TodoRepository implements RepositoryBaseInterface {
   }
 
   async changeStatus(id: string, { status }: TodoUpdateDTO) {
-    await TodoModel.update({ status }, { where: { id } });
+    const updatedTodo = await TodoModel.update({ status }, { where: { id }, returning: true })
+      .then(([rowsUpdate, [updateTodo]]) => updateTodo.get());
     await TodoEventRepository.create({ todo_id: id, status });
+    return updatedTodo;
   }
 }
 
