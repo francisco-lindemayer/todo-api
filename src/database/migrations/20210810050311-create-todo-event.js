@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
         references: { model: 'todo', key: 'id' },
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
       status: {
         type: Sequelize.ENUM('OPENED', 'CONCLUDED'),
