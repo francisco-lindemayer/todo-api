@@ -19,7 +19,7 @@ Aplicação rodando por padrão na port 3333
 # Pending items
 
 - [ ]  Revisar e padronizar nomes de arquivos, classes, interfaces e metodos.
-    - [ ]  Modificar para kebab-case
+    - [ ]  Modificar arquivos para kebab-case
 - [ ]  Middleware para validações
 - [ ]  Helmet
 - [ ]  Review path TS (@models, etc). Include Interfaces
