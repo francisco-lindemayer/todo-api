@@ -18,8 +18,9 @@ Aplicação rodando por padrão na port 3333
 - Singleton
 # Pending items
 
+- [ ]  Revisar e padronizar nomes de arquivos, classes, interfaces e metodos.
+    - [ ]  Modificar para kebab-case
 - [ ]  Middleware para validações
-- [ ]  Revisar e padronizar nomes de arquivos, classes, interfaces e metodos (arrow ou function? modificadores de acesso?)
 - [ ]  Helmet
 - [ ]  Review path TS (@models, etc). Include Interfaces
     - [ ]  Search and replace imports "src/interfaces/...."
