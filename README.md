@@ -31,4 +31,4 @@ Aplicação rodando por padrão na port 3333
 - [ ]  Verificar forma correta de rodar testes com Docker
 - [ ]  Promise.race com apis de fatos randomicos
 - [ ]  Dependency injection entre camadas
-- [ ]  Explorar implementações de swagger no braço
+- [ ]  Explorar implementações de swagger UI. Estratégias de uso da API
