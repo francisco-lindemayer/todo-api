@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable('todo_event', {
+    return await queryInterface.createTable('todo_event', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -17,7 +17,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       status: {
-        type: Sequelize.ENUM('OPENED', 'CONCLUDED'),
+        type: Sequelize.ENUM('OPENED', 'CONCLUDED', 'ARCHIVED'),
         allowNull: false,
         defaultValue: 'OPENED',
       },

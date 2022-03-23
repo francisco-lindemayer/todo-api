@@ -15,14 +15,14 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       status: {
-        type: Sequelize.ENUM('OPENED', 'CONCLUDED'),
+        type: Sequelize.ENUM('OPENED', 'CONCLUDED', 'ARCHIVED'),
         allowNull: false,
         defaultValue: 'OPENED',
       },
@@ -33,6 +33,10 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
+      },
+      archived_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
     });
   },

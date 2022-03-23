@@ -1,4 +1,5 @@
 export enum TodoStatusEnum {
   OPENED = 'OPENED',
-  CONCLUDED = 'CONCLUDED'
+  CONCLUDED = 'CONCLUDED',
+  ARCHIVED = 'ARCHIVED'
 }

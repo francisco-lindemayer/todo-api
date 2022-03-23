@@ -1,10 +1,11 @@
 import { v4 as uuid } from "uuid";
 import { RepositoryBaseInterface } from "src/interfaces/repository-base.interface";
-import { TodoModel } from "@models/TodoModel";
+import { TodoModel } from "@models/todo.model";
 import { TodoEventModel } from "@models/todo-event.model";
 import { TodoCreateDTO } from "src/dtos/todo-create.dto";
 import { TodoUpdateDTO } from "src/dtos/todo-update.dto";
 import TodoEventRepository from "./todo-event.repository";
+import { FilterBaseInterface } from "src/interfaces/filter.interface";
 
 class TodoRepository implements RepositoryBaseInterface {
   async show() {
@@ -18,14 +19,10 @@ class TodoRepository implements RepositoryBaseInterface {
     return await TodoModel.create({ id, description, email, name });
   };
 
-  async index(id: string) {
-    return await TodoModel.findByPk(id, {
-      include: [{
-        model: TodoEventModel,
-        order: [['created_at', 'ASC']]
-      }],
+  async index(id: string, filter?: FilterBaseInterface) {
+    const { include } = filter ?? {};
 
-    });
+    return await TodoModel.findByPk(id, { include });
   }
 
   async update(id: string, { description, email, name, status }: TodoUpdateDTO) {

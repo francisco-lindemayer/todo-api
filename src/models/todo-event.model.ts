@@ -1,5 +1,5 @@
 import { Model, Table, Column, PrimaryKey, ForeignKey, IsUUID, AllowNull, NotEmpty, CreatedAt, UpdatedAt, Default, HasMany, BelongsTo } from 'sequelize-typescript';
-import { TodoModel } from '@models/TodoModel';
+import { TodoModel } from '@models/todo.model';
 import { TodoStatusEnum } from 'src/enum/todo-status.enum';
 
 interface TodoEventModelInterface {
