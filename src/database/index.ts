@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { TodoModel } from '@models/TodoModel';
+import { TodoModel } from '@models/todo.model';
 import { TodoEventModel } from '@models/todo-event.model';
 
 const dbConfig = require('../config/db')

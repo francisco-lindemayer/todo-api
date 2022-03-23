@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { TodoModel } from '@models/TodoModel';
 import EmailService from 'src/services/email.service';
 import TodoRepository from 'src/repositories/todo.repository';
 import RandomFacts from 'src/services/facts.service';
@@ -75,34 +74,41 @@ class TodoController {
     const { id } = request.params;
     const { status, password } = request.body;
     try {
-      const todo = await TodoRepository.index(id);
+      const todo = await TodoRepository.index(id,
+        {
+          include: [
+            {
+              model: TodoEventModel
+            }
+          ],
+        });
       if (!(todo)) {
-        return response.status(400).json({ error: 'TODO not found' });
+        return response.status(400).json({ error: 'TODO not found!' });
       }
       if (status === todo.status) {
-        return response.status(422).json({ error: 'TODO already has this status' });
+        return response.status(422).json({ error: 'TODO already has this status!' });
       }
       if (status === TodoStatusEnum.OPENED) {
         if (password !== process.env.MANAGER_PASS) {
-          return response.status(403).json({ error: 'Invalid password to reopen TODO' });
+          return response.status(403).json({ error: 'Invalid password to reopen TODO!' });
         }
       }
       if (status === TodoStatusEnum.OPENED) {
         if (!this.haveReopen(todo.event)) {
-          return response.status(422).json({ error: 'Limit to reopen TODO reached' });
+          return response.status(422).json({ error: 'Limit to reopen TODO reached!' });
         }
       }
       const updatedTodo = await TodoRepository.changeStatus(id, { status })
       return response.status(201).json(updatedTodo);
     } catch (error) {
-      return response.status(500).json({ error: 'TODO change status failed' });
+      return response.status(500).json({ error: 'TODO change status failed!' });
     }
   }
 
   public generateRandom = async (request: Request, response: Response) => {
     try {
-      const name = 'Eu'
-      const email = 'eu@me.com'
+      const name = process.env.DEFAULT_ASSIGNEE || 'Eu';
+      const email = process.env.DEFAULT_EMAIL || 'eu@me.com';
       const dogFacts = await RandomFacts.getDogFacts();
       const todos = await Promise.all(dogFacts.map((description) => {
         return TodoRepository.create({ description, email, name });

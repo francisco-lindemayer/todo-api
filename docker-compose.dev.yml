@@ -13,6 +13,8 @@ services:
         POSTGRES_PASSWORD: ${DB_PASS}
       networks:
         - app-connect
+      ports:
+        - ${DB_PORT}:5432
 
   app:
     container_name: todo-server
